@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE users SET timezone = ? WHERE telegram_user_id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "b9168f7b213d8ab7ae32eccf1ac2e30ee510840f3afdb4c37591d120eda8c77b"
+}

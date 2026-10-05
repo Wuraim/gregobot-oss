@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "DELETE FROM training_strength_sets WHERE training_id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": []
+  },
+  "hash": "fe13fe6e73a830a8c3752f5a4eb6a6e0f1b30dc5b5c4008b680b8ae9c35474f5"
+}

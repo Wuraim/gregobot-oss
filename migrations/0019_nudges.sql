@@ -1,0 +1,3 @@
+ALTER TABLE users ADD COLUMN nudges_enabled INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE users ADD COLUMN nudge_inactivity_days INTEGER NOT NULL DEFAULT 3;
+ALTER TABLE users ADD COLUMN last_nudge_at TEXT;

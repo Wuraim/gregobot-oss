@@ -1,0 +1,110 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT u.id, u.telegram_user_id, u.username, u.first_name, u.language_code, u.description,\n               u.timezone,\n               u.web_search_enabled, u.daily_recap_enabled, u.daily_recap_hour,\n               u.daily_recap_minute, u.last_daily_recap_at,\n               u.nudges_enabled, u.nudge_inactivity_days, u.last_nudge_at,\n               r.name AS role_name\n        FROM users u\n        JOIN roles r ON r.id = u.role_id\n        WHERE u.telegram_user_id = ?\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "telegram_user_id",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "username",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "first_name",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "language_code",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "description",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "timezone",
+        "ordinal": 6,
+        "type_info": "Text"
+      },
+      {
+        "name": "web_search_enabled",
+        "ordinal": 7,
+        "type_info": "Integer"
+      },
+      {
+        "name": "daily_recap_enabled",
+        "ordinal": 8,
+        "type_info": "Integer"
+      },
+      {
+        "name": "daily_recap_hour",
+        "ordinal": 9,
+        "type_info": "Integer"
+      },
+      {
+        "name": "daily_recap_minute",
+        "ordinal": 10,
+        "type_info": "Integer"
+      },
+      {
+        "name": "last_daily_recap_at",
+        "ordinal": 11,
+        "type_info": "Text"
+      },
+      {
+        "name": "nudges_enabled",
+        "ordinal": 12,
+        "type_info": "Integer"
+      },
+      {
+        "name": "nudge_inactivity_days",
+        "ordinal": 13,
+        "type_info": "Integer"
+      },
+      {
+        "name": "last_nudge_at",
+        "ordinal": 14,
+        "type_info": "Text"
+      },
+      {
+        "name": "role_name",
+        "ordinal": 15,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "e5b6fa1b53edc5830f742444c1ec255c0fffedf1fe53797ce181d5877f431fea"
+}

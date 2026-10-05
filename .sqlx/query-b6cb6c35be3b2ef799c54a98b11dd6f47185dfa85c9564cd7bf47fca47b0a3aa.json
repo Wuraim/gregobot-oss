@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        UPDATE chat_settings\n        SET last_monthly_training_graph_at = datetime('now')\n        WHERE chat_id = ?\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": []
+  },
+  "hash": "b6cb6c35be3b2ef799c54a98b11dd6f47185dfa85c9564cd7bf47fca47b0a3aa"
+}

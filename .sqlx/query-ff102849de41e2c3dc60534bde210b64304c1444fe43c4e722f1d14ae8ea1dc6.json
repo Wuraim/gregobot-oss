@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        INSERT INTO chat_settings (chat_id, sport_reaction_emoji)\n        VALUES (?, ?)\n        ON CONFLICT(chat_id) DO UPDATE SET sport_reaction_emoji = excluded.sport_reaction_emoji\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "ff102849de41e2c3dc60534bde210b64304c1444fe43c4e722f1d14ae8ea1dc6"
+}

@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "DELETE FROM feature_proposals WHERE id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": []
+  },
+  "hash": "24c81f8a7e60cd3316d0d190cbb0c6ae7b9726a1203b16d1f14ee404670462b8"
+}

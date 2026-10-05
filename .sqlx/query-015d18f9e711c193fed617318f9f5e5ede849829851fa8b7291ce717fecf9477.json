@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        UPDATE users SET\n            username = COALESCE(?, username),\n            first_name = COALESCE(?, first_name)\n        WHERE telegram_user_id = ?\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "015d18f9e711c193fed617318f9f5e5ede849829851fa8b7291ce717fecf9477"
+}

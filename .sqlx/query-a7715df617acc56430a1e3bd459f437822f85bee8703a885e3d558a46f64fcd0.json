@@ -1,0 +1,50 @@
+{
+  "db_name": "SQLite",
+  "query": "\n            SELECT s.id, s.training_id, s.set_index, s.reps, s.weight_kg,\n                   e.slug AS exercise_slug\n            FROM training_strength_sets s\n            JOIN strength_exercises e ON e.id = s.exercise_id\n            WHERE s.training_id = ?\n            ORDER BY s.set_index ASC, s.id ASC\n            ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "training_id",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "set_index",
+        "ordinal": 2,
+        "type_info": "Integer"
+      },
+      {
+        "name": "reps",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "weight_kg",
+        "ordinal": 4,
+        "type_info": "Float"
+      },
+      {
+        "name": "exercise_slug",
+        "ordinal": 5,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      true,
+      false,
+      false,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "a7715df617acc56430a1e3bd459f437822f85bee8703a885e3d558a46f64fcd0"
+}

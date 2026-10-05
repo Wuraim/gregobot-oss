@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        INSERT INTO chunks (source_type, source_id, user_id, chat_id, role, content)\n        VALUES ('conversation', ?, ?, ?, ?, ?)\n        RETURNING id\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 5
+    },
+    "nullable": [
+      true
+    ]
+  },
+  "hash": "2f3943cdef538c9bb4381a09dcdfb17e0f001b63d7b3011ab20c5bc6292402bc"
+}

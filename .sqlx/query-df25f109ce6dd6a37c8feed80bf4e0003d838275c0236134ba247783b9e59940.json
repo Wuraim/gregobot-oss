@@ -1,0 +1,50 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT te.id, te.user_id, te.description, te.recorded_at, te.activity_type_id,\n               at.slug AS activity_slug\n        FROM training_entries te\n        JOIN activity_types at ON at.id = te.activity_type_id\n        WHERE te.user_id = ?\n        ORDER BY te.recorded_at DESC\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "user_id",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "description",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "recorded_at",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "activity_type_id",
+        "ordinal": 4,
+        "type_info": "Integer"
+      },
+      {
+        "name": "activity_slug",
+        "ordinal": 5,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "df25f109ce6dd6a37c8feed80bf4e0003d838275c0236134ba247783b9e59940"
+}

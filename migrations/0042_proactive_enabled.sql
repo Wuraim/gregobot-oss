@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN proactive_enabled INTEGER NOT NULL DEFAULT 1;

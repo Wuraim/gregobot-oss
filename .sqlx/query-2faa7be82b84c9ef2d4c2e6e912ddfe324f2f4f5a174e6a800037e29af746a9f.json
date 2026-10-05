@@ -1,0 +1,80 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT u.telegram_user_id AS telegram_user_id,\n               u.username AS username,\n               a.model AS \"model!\",\n               COALESCE(SUM(a.prompt_tokens), 0) AS \"prompt_tokens!: i64\",\n               COALESCE(SUM(a.completion_tokens), 0) AS \"completion_tokens!: i64\",\n               COALESCE(SUM(a.total_tokens), 0) AS \"total_tokens!: i64\",\n               COUNT(*) AS \"request_count!: i64\",\n               COALESCE(SUM(a.cached_tokens), 0) AS \"cached_tokens!: i64\",\n               COALESCE(SUM(a.image_tokens), 0) AS \"image_tokens!: i64\",\n               COALESCE(SUM(CASE WHEN a.completion_tokens <= 0 THEN 1 ELSE 0 END), 0) AS \"zero_output_requests!: i64\",\n               COALESCE(SUM(CASE WHEN a.prompt_tokens <= 0 AND a.completion_tokens <= 0 THEN 1 ELSE 0 END), 0) AS \"zero_token_requests!: i64\"\n        FROM ai_usage a\n        JOIN users u ON u.id = a.user_id\n        GROUP BY u.id, a.model\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "telegram_user_id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "username",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "model!",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "prompt_tokens!: i64",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "completion_tokens!: i64",
+        "ordinal": 4,
+        "type_info": "Integer"
+      },
+      {
+        "name": "total_tokens!: i64",
+        "ordinal": 5,
+        "type_info": "Integer"
+      },
+      {
+        "name": "request_count!: i64",
+        "ordinal": 6,
+        "type_info": "Integer"
+      },
+      {
+        "name": "cached_tokens!: i64",
+        "ordinal": 7,
+        "type_info": "Integer"
+      },
+      {
+        "name": "image_tokens!: i64",
+        "ordinal": 8,
+        "type_info": "Integer"
+      },
+      {
+        "name": "zero_output_requests!: i64",
+        "ordinal": 9,
+        "type_info": "Integer"
+      },
+      {
+        "name": "zero_token_requests!: i64",
+        "ordinal": 10,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "2faa7be82b84c9ef2d4c2e6e912ddfe324f2f4f5a174e6a800037e29af746a9f"
+}

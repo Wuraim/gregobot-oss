@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT chat_id\n        FROM chat_settings\n        WHERE monthly_training_graph_enabled = 1\n          AND (\n            last_monthly_training_graph_at IS NULL\n            OR strftime('%Y-%m', last_monthly_training_graph_at) < strftime('%Y-%m', 'now')\n          )\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "chat_id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "4106243a2a6a747db38661f7690848705943795300d8e12f688e64809fe57f9b"
+}

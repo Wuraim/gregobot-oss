@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT recorded_at FROM training_entries WHERE user_id = ? AND recorded_at >= ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "recorded_at",
+        "ordinal": 0,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "84d27ddaecea820eec03947f15e3b4558a8a3ef404bc591e9392698334a8b0d6"
+}

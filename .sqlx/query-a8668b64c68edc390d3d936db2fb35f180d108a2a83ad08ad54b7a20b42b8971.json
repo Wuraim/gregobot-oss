@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO proactive_interactions (user_id, message) VALUES (?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "a8668b64c68edc390d3d936db2fb35f180d108a2a83ad08ad54b7a20b42b8971"
+}

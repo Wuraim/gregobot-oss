@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        INSERT INTO users (telegram_user_id, role_id, username, language_code, description, timezone)\n        SELECT ?, r.id, ?, ?, ?, ? FROM roles r WHERE r.name = ?\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 6
+    },
+    "nullable": []
+  },
+  "hash": "e5da99807456eec6cb47ce703d761432c76331419af5ccc51dba5daa5ebb9cb3"
+}

@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE users SET language_code = ? WHERE telegram_user_id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "1ce9f98dacba82354c00a6ea587ebfe4ed9c293a5d73868c832552e886b57751"
+}

@@ -1,0 +1,38 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT id, slug, uses_endurance, uses_strength\n        FROM activity_types\n        WHERE slug = ?\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "slug",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "uses_endurance",
+        "ordinal": 2,
+        "type_info": "Integer"
+      },
+      {
+        "name": "uses_strength",
+        "ordinal": 3,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      true,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "c07125c49155c4e32488727549cbf73a7058247e014747a8fc07cf1dbd5c2f38"
+}

@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        DELETE FROM conversations\n        WHERE chat_id IS NOT NULL\n          AND id NOT IN (\n            SELECT id FROM (\n              SELECT id FROM conversations AS c2\n              WHERE c2.chat_id = conversations.chat_id\n              ORDER BY c2.id DESC\n              LIMIT 100\n            )\n          )\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": []
+  },
+  "hash": "ca1b91b066da7e0f08e080dc5f43500e83f25f38b2c368cb50597b70c810040c"
+}

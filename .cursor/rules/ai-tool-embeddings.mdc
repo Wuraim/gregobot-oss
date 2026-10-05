@@ -1,0 +1,13 @@
+---
+description: Keep AI tool embed_text monolingual — embeddings handle cross-language matching
+globs: src/ai/tools.rs
+alwaysApply: false
+---
+
+# Tool `embed_text` language
+
+`embed_text` is only for embedding-based tool selection. Do **not** list synonyms in multiple languages (e.g. English + French).
+
+- Write `embed_text` in **English only** (short capability description + English trigger phrases).
+- Do not pad with FR/EN duplicates like `weight chart, courbe de poids, graphique de poids`.
+- Multilingual user messages still match via the embedding model; keyword lists in several languages add noise, not recall.

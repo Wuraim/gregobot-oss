@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        UPDATE tasks\n        SET status = ?,\n            completed_at = CASE WHEN ? = 'done' THEN datetime('now') ELSE NULL END\n        WHERE id = ? AND user_id = ?\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 4
+    },
+    "nullable": []
+  },
+  "hash": "357b18f1a7004ab52cf0ab1454832abe3eff27f09faf071c92f5af26a588000b"
+}

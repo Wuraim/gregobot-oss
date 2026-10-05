@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        UPDATE reminders\n        SET scheduled_at = ?\n        WHERE id = ? AND user_id = ? AND status = 'pending'\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "36731ce48a8da9d5a3441b2f980ad6b9f8c0a9cf61aa8194cd6f4895dba85bb1"
+}

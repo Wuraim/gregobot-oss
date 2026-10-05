@@ -1,0 +1,38 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT\n            c.id AS id,\n            c.role AS role,\n            c.content AS content,\n            c.chat_id AS chat_id\n        FROM conversations AS c\n        LEFT JOIN chunks AS ch\n            ON ch.source_type = 'conversation' AND ch.source_id = c.id\n        WHERE c.user_id = ? AND ch.id IS NULL\n        ORDER BY c.id\n        LIMIT ?\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "role",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "content",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "chat_id",
+        "ordinal": 3,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "e4bb3fd96efcf8fb71e992537808656355f4791bea0434874cff032e02ea3580"
+}

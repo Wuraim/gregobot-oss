@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gregobot AI traces</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --error: #f85149;
+      --ask: #58a6ff;
+      --proactive: #bc8cff;
+      --daily_recap: #3fb950;
+      --nudge: #d29922;
+      --cost: #e3b341;
+      --user-bubble: #1f3a5f;
+      --assistant-bubble: #1c2a1f;
+      --tool-bg: #2d2416;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    #controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 16px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    #controls label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--muted);
+      user-select: none;
+    }
+    select, input[type="text"], input[type="password"] {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    button, a.navlink {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: none;
+    }
+    button:hover, a.navlink:hover { background: var(--border); }
+    #status { margin-left: auto; color: var(--muted); }
+
+    #main { flex: 1; display: flex; min-height: 0; }
+    #list {
+      width: 400px;
+      min-width: 400px;
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+    }
+    #detail {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+    #detail .placeholder { color: var(--muted); margin-top: 40px; text-align: center; }
+
+    .trace-item {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .trace-item:hover { background: rgba(255,255,255,0.03); }
+    .trace-item.selected { background: rgba(88,166,255,0.12); border-left: 3px solid var(--accent); }
+    .trace-item .row1 { display: flex; gap: 8px; align-items: center; }
+    .trace-item .ts { color: var(--muted); font-size: 11px; }
+    .trace-item .meta { color: var(--muted); font-size: 11px; margin-top: 2px; }
+    .trace-item .preview {
+      color: var(--text);
+      font-size: 12px;
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .trace-item.error .preview { color: var(--error); }
+
+    .badge {
+      font-size: 10px;
+      font-weight: bold;
+      text-transform: uppercase;
+      padding: 1px 6px;
+      border-radius: 8px;
+      border: 1px solid;
+    }
+    .badge-ask { color: var(--ask); border-color: var(--ask); }
+    .badge-proactive { color: var(--proactive); border-color: var(--proactive); }
+    .badge-daily_recap { color: var(--daily_recap); border-color: var(--daily_recap); }
+    .badge-nudge { color: var(--nudge); border-color: var(--nudge); }
+    .badge-training_extract { color: #39d0d8; border-color: #39d0d8; }
+
+    .cost {
+      color: var(--cost);
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+    .trace-item .row1 { justify-content: space-between; }
+    .trace-item .row1 .left { display: flex; gap: 8px; align-items: center; }
+
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .chip {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .chip b { color: var(--text); font-weight: normal; }
+    .chip.cost-chip {
+      border-color: var(--cost);
+      color: var(--cost);
+      font-size: 13px;
+    }
+    .chip.cost-chip b { color: var(--cost); font-weight: 700; }
+
+    #rates-panel {
+      display: none;
+      padding: 12px 16px 16px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    #rates-panel.open { display: block; }
+    #rates-panel h3 {
+      margin: 0 0 8px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    #rates-panel .source { color: var(--muted); font-size: 11px; margin-bottom: 8px; }
+    table.rates {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 12px;
+    }
+    table.rates th, table.rates td {
+      text-align: left;
+      padding: 4px 8px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    table.rates th { color: var(--muted); font-weight: 600; }
+    table.rates td.num { font-variant-numeric: tabular-nums; color: var(--cost); }
+
+    .section { margin-bottom: 14px; }
+    .section-title {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .section-title::before { content: "▸ "; }
+    .section-title.open::before { content: "▾ "; }
+
+    pre.block {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px;
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .collapsed { display: none; }
+
+    .bubble {
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      max-width: 90%;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .bubble .role { font-size: 10px; color: var(--muted); text-transform: uppercase; margin-bottom: 3px; }
+    .bubble.user { background: var(--user-bubble); margin-left: auto; }
+    .bubble.model { background: var(--assistant-bubble); }
+    .bubble.final { background: var(--assistant-bubble); border: 1px solid var(--daily_recap); max-width: 100%; }
+
+    .iter-sep {
+      color: var(--muted);
+      font-size: 11px;
+      margin: 14px 0 8px;
+      border-top: 1px dashed var(--border);
+      padding-top: 8px;
+    }
+
+    .tool-card {
+      background: var(--tool-bg);
+      border: 1px solid #6b5618;
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+    }
+    .tool-card .tool-name { color: var(--nudge); font-weight: bold; margin-bottom: 4px; }
+    .tool-card pre {
+      background: var(--bg);
+      border-radius: 4px;
+      padding: 6px 8px;
+      margin: 4px 0;
+      font-size: 11px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+    .tool-card .label { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+
+    .error-banner {
+      background: #3d1215;
+      border: 1px solid var(--error);
+      color: var(--error);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    #modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    #modal-content {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 24px;
+      border-radius: 8px;
+      min-width: 320px;
+    }
+    #modal-content h2 { margin-top: 0; }
+    #modal-content input {
+      width: 100%;
+      margin: 12px 0;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div id="modal">
+    <div id="modal-content">
+      <h2>API Key Required</h2>
+      <p>Enter your bot token to view AI traces.</p>
+      <input type="password" id="api-key" placeholder="X-API-Key">
+      <button id="save-key">View Traces</button>
+    </div>
+  </div>
+
+  <div id="controls">
+    <label>Kind
+      <select id="filter-kind">
+        <option value="">all</option>
+        <option value="ask">ask</option>
+        <option value="proactive">proactive</option>
+        <option value="daily_recap">daily_recap</option>
+        <option value="nudge">nudge</option>
+        <option value="training_extract">training_extract</option>
+      </select>
+    </label>
+    <input type="text" id="search" placeholder="Search...">
+    <input type="text" id="filter-user" placeholder="User id / tg id" style="width:120px">
+    <label>Limit
+      <select id="limit">
+        <option>20</option>
+        <option selected>50</option>
+        <option>100</option>
+        <option>200</option>
+      </select>
+    </label>
+    <button id="toggle-refresh">Pause</button>
+    <button id="toggle-rates">Model rates</button>
+    <a class="navlink" href="/logs">Logs →</a>
+    <span id="status">Connecting...</span>
+  </div>
+  <div id="rates-panel"></div>
+
+  <div id="main">
+    <div id="list"></div>
+    <div id="detail"><div class="placeholder">Select a trace on the left</div></div>
+  </div>
+
+  <script>
+    const listEl = document.getElementById('list');
+    const detailEl = document.getElementById('detail');
+    const statusEl = document.getElementById('status');
+    const modal = document.getElementById('modal');
+    const keyInput = document.getElementById('api-key');
+    const saveKeyBtn = document.getElementById('save-key');
+    const filterKind = document.getElementById('filter-kind');
+    const searchEl = document.getElementById('search');
+    const filterUser = document.getElementById('filter-user');
+    const limitEl = document.getElementById('limit');
+    const toggleRefreshBtn = document.getElementById('toggle-refresh');
+    const toggleRatesBtn = document.getElementById('toggle-rates');
+    const ratesPanel = document.getElementById('rates-panel');
+
+    let apiKey = sessionStorage.getItem('logsApiKey') || '';
+    let refresh = true;
+    let selectedId = null;
+    let lastFingerprint = '';
+    let ratesLoaded = false;
+
+    if (apiKey) modal.style.display = 'none';
+
+    saveKeyBtn.addEventListener('click', () => {
+      apiKey = keyInput.value.trim();
+      if (apiKey) {
+        sessionStorage.setItem('logsApiKey', apiKey);
+        modal.style.display = 'none';
+        refreshList();
+      }
+    });
+    keyInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveKeyBtn.click(); });
+
+    toggleRefreshBtn.addEventListener('click', () => {
+      refresh = !refresh;
+      toggleRefreshBtn.textContent = refresh ? 'Pause' : 'Resume';
+      statusEl.textContent = refresh ? 'Live' : 'Paused';
+    });
+    toggleRatesBtn.addEventListener('click', async () => {
+      const open = ratesPanel.classList.toggle('open');
+      toggleRatesBtn.textContent = open ? 'Hide rates' : 'Model rates';
+      if (open && !ratesLoaded) await loadRates();
+    });
+    filterKind.addEventListener('change', () => { lastFingerprint = ''; refreshList(); });
+    searchEl.addEventListener('input', () => renderList(window._traces || []));
+    filterUser.addEventListener('input', () => renderList(window._traces || []));
+    limitEl.addEventListener('change', () => { lastFingerprint = ''; refreshList(); });
+
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function prettyJson(raw) {
+      try { return JSON.stringify(JSON.parse(raw), null, 2); }
+      catch { return raw; }
+    }
+
+    function formatUsd(n) {
+      if (typeof n !== 'number' || !isFinite(n)) return '—';
+      const abs = Math.abs(n);
+      if (abs === 0) return '$0';
+      if (abs < 0.0001) return '$' + n.toFixed(6);
+      if (abs < 0.01) return '$' + n.toFixed(5);
+      return '$' + n.toFixed(4);
+    }
+
+    function formatPerM(n) {
+      if (typeof n !== 'number' || !n) return '—';
+      return '$' + n.toFixed(3).replace(/0+$/, '').replace(/\.$/, '') + '/1M';
+    }
+
+    function visibleTraces(traces) {
+      const kind = filterKind.value;
+      const term = searchEl.value.toLowerCase();
+      const user = filterUser.value.trim();
+      return traces
+        .filter(t => !kind || t.kind === kind)
+        .filter(t => {
+          if (!user) return true;
+          return String(t.user_id) === user || String(t.telegram_user_id) === user;
+        })
+        .filter(t => !term || (t.preview + ' ' + t.kind + ' ' + t.model + ' ' + t.user_id + ' ' + (t.telegram_user_id || '')).toLowerCase().includes(term));
+    }
+
+    async function loadRates() {
+      if (!apiKey) return;
+      ratesPanel.innerHTML = '<div class="source">Loading published Standard rates…</div>';
+      try {
+        const res = await fetch('/api/ai/pricing', { headers: { 'X-API-Key': apiKey } });
+        if (!res.ok) {
+          ratesPanel.innerHTML = '<div class="source">Failed to load rates (' + res.status + ')</div>';
+          return;
+        }
+        const data = await res.json();
+        let html = '<h3>Exact model rates</h3>' +
+          '<div class="source">' + esc(data.source || '') + '</div>' +
+          '<table class="rates"><thead><tr>' +
+          '<th>Model</th><th>Input</th><th>Output</th><th>Cache</th><th>Image / embed</th>' +
+          '</tr></thead><tbody>';
+        (data.models || []).forEach(m => {
+          const r = m.rates || {};
+          let extra = '';
+          if (r.image_usd_if_no_output) extra = formatUsd(r.image_usd_if_no_output) + '/image if 0 output tok';
+          else if (r.embedding_image_per_million) extra = 'image ' + formatPerM(r.embedding_image_per_million) +
+            (r.embedding_image_usd ? ' · ' + formatUsd(r.embedding_image_usd) + '/image fallback' : '');
+          html += '<tr><td>' + esc(m.model) + '</td>' +
+            '<td class="num">' + formatPerM(r.input_per_million) + '</td>' +
+            '<td class="num">' + formatPerM(r.output_per_million) + '</td>' +
+            '<td class="num">' + formatPerM(r.cache_per_million) + '</td>' +
+            '<td class="num">' + esc(extra || '—') + '</td></tr>';
+        });
+        html += '</tbody></table>';
+        ratesPanel.innerHTML = html;
+        ratesLoaded = true;
+      } catch (e) {
+        ratesPanel.innerHTML = '<div class="source">Error: ' + esc(e.message) + '</div>';
+      }
+    }
+
+    function shownStatus(traces) {
+      const shown = visibleTraces(traces);
+      const total = shown.reduce((s, t) => s + (t.session_usd || t.estimated_usd || 0), 0);
+      return (refresh ? 'Live' : 'Paused') + ' — ' + shown.length + ' traces · ' + formatUsd(total) + ' shown';
+    }
+
+    async function refreshList() {
+      if (!apiKey) return;
+      try {
+        const res = await fetch('/api/ai/logs?limit=' + limitEl.value, {
+          headers: { 'X-API-Key': apiKey }
+        });
+        if (res.status === 401) {
+          sessionStorage.removeItem('logsApiKey');
+          apiKey = '';
+          modal.style.display = 'flex';
+          statusEl.textContent = 'Unauthorized';
+          return;
+        }
+        const data = await res.json();
+        window._traces = data;
+        const fingerprint = data.map(t => t.id + ':' + t.session_usd + ':' + t.estimated_usd).join(',');
+        if (fingerprint !== lastFingerprint) {
+          lastFingerprint = fingerprint;
+          renderList(data);
+        }
+        statusEl.textContent = shownStatus(data);
+      } catch (e) {
+        statusEl.textContent = 'Error: ' + e.message;
+      }
+    }
+
+    function renderList(traces) {
+      listEl.innerHTML = '';
+      visibleTraces(traces).forEach(t => {
+          const el = document.createElement('div');
+          el.className = 'trace-item' + (t.error ? ' error' : '') + (t.id === selectedId ? ' selected' : '');
+          el.innerHTML =
+            '<div class="row1"><span class="left"><span class="badge badge-' + esc(t.kind) + '">' + esc(t.kind) + '</span>' +
+            '<span class="ts">' + esc(t.timestamp) + '</span></span>' +
+            '<span class="cost">' + formatUsd(t.session_usd != null ? t.session_usd : t.estimated_usd) + '</span></div>' +
+            '<div class="meta">user ' + t.user_id + (t.telegram_user_id ? ' / tg ' + t.telegram_user_id : '') + ' · ' + esc(t.model) + ' · ' +
+              t.total_tokens + ' tok' + (t.cached_tokens ? ' (' + t.cached_tokens + ' cache, ' + Math.round(t.cache_hit_pct || 0) + '%' +
+                (t.cache_usd_saved ? ', saved ' + formatUsd(t.cache_usd_saved) : '') + ')' : '') +
+              (t.child_count ? ' · +' + t.child_count + ' sibling' : '') +
+              ' · ' + t.iterations + ' iter · ' + t.duration_ms + ' ms</div>' +
+            '<div class="preview">' + esc(t.preview || '(empty)') + '</div>';
+          el.addEventListener('click', () => selectTrace(t.id));
+          listEl.appendChild(el);
+        });
+      statusEl.textContent = shownStatus(traces);
+    }
+
+    async function selectTrace(id) {
+      selectedId = id;
+      renderList(window._traces || []);
+      detailEl.innerHTML = '<div class="placeholder">Loading…</div>';
+      try {
+        const res = await fetch('/api/ai/logs/' + id, { headers: { 'X-API-Key': apiKey } });
+        if (!res.ok) {
+          detailEl.innerHTML = '<div class="placeholder">Failed to load trace (' + res.status + ')</div>';
+          return;
+        }
+        renderDetail(await res.json());
+      } catch (e) {
+        detailEl.innerHTML = '<div class="placeholder">Error: ' + esc(e.message) + '</div>';
+      }
+    }
+
+    function section(title, innerHtml, open) {
+      return '<div class="section">' +
+        '<div class="section-title' + (open ? ' open' : '') + '" onclick="this.classList.toggle(\'open\');this.nextElementSibling.classList.toggle(\'collapsed\')">' +
+        esc(title) + '</div>' +
+        '<div class="' + (open ? '' : 'collapsed') + '">' + innerHtml + '</div></div>';
+    }
+
+    function bubble(role, text, cls) {
+      return '<div class="bubble ' + cls + '"><div class="role">' + esc(role) + '</div>' + esc(text) + '</div>';
+    }
+
+    function toolCard(tc) {
+      return '<div class="tool-card">' +
+        '<div class="tool-name">⚙ ' + esc(tc.name) + '</div>' +
+        '<div class="label">args</div><pre>' + esc(prettyJson(tc.args)) + '</pre>' +
+        '<div class="label">result</div><pre>' + esc(prettyJson(tc.result)) + '</pre>' +
+        '</div>';
+    }
+
+    function rateChips(t) {
+      const r = t.rates || {};
+      let html = '<span class="chip">in <b>' + formatPerM(r.input_per_million) + '</b></span>' +
+        '<span class="chip">out <b>' + formatPerM(r.output_per_million) + '</b></span>';
+      if (r.cache_per_million) html += '<span class="chip">cache <b>' + formatPerM(r.cache_per_million) + '</b></span>';
+      if (r.image_usd_if_no_output) html += '<span class="chip">image fallback <b>' + formatUsd(r.image_usd_if_no_output) + '</b></span>';
+      if (r.embedding_image_per_million) html += '<span class="chip">embed image <b>' + formatPerM(r.embedding_image_per_million) + '</b></span>';
+      return html;
+    }
+
+    function renderDetail(t) {
+      let html = '';
+
+      if (t.error) {
+        html += '<div class="error-banner"><b>Error</b>\n' + esc(t.error) + '</div>';
+      }
+
+      html += '<div class="chips">' +
+        '<span class="chip cost-chip">session <b>' + formatUsd(t.session_usd != null ? t.session_usd : t.estimated_usd) + '</b></span>' +
+        '<span class="chip">loop <b>' + formatUsd(t.estimated_usd) + '</b></span>' +
+        '<span class="chip"><b>' + esc(t.kind) + '</b></span>' +
+        '<span class="chip">model <b>' + esc(t.model) + '</b></span>' +
+        '<span class="chip">user <b>' + t.user_id + (t.telegram_user_id ? ' / tg ' + t.telegram_user_id : '') + '</b></span>' +
+        '<span class="chip">tokens <b>' + t.prompt_tokens + ' → ' + t.completion_tokens +
+          ' (' + t.total_tokens + (t.cached_tokens ? ', ' + t.cached_tokens + ' cached ' + Math.round(t.cache_hit_pct || 0) + '%' : '') + ')</b></span>' +
+        (t.cache_usd_saved ? '<span class="chip">cache saved <b>' + formatUsd(t.cache_usd_saved) + '</b></span>' : '') +
+        '<span class="chip">iterations <b>' + t.iterations + '</b></span>' +
+        '<span class="chip">duration <b>' + t.duration_ms + ' ms</b></span>' +
+        '<span class="chip">id <b>' + esc(t.request_id) + '</b></span>' +
+        '</div>' +
+        '<div class="chips">' + rateChips(t) + '</div>';
+
+      html += section('System prompt', '<pre class="block">' + esc(t.system_prompt) + '</pre>', false);
+
+      let convo = '';
+      t.messages.forEach(m => {
+        convo += bubble(m.role, m.text, m.role === 'user' ? 'user' : 'model');
+      });
+      html += section('Initial messages (' + t.messages.length + ')', convo, true);
+
+      t.steps.forEach(s => {
+        let step = '<div class="iter-sep">Iteration ' + s.iteration +
+          (s.finish_reason ? ' — ' + esc(s.finish_reason) : '') +
+          ' · ' + formatUsd(s.estimated_usd || 0) +
+          (s.total_tokens ? ' · ' + s.prompt_tokens + '→' + s.completion_tokens + ' tok' : '') +
+          (s.cached_tokens ? ' · ' + s.cached_tokens + ' cache' : '') +
+          '</div>';
+        if (s.model_text) step += bubble('model', s.model_text, 'model');
+        s.tool_calls.forEach(tc => { step += toolCard(tc); });
+        html += step;
+      });
+
+      if (t.children && t.children.length) {
+        let kids = t.children.map(c =>
+          '<div class="chip">' + esc(c.kind) + ' · ' + esc(c.model) + ' · ' +
+          formatUsd(c.estimated_usd) + ' · ' + c.total_tokens + ' tok</div>'
+        ).join('');
+        html += section('Session siblings (' + t.children.length + ')', '<div class="chips">' + kids + '</div>', true);
+      }
+
+      if (t.final_text) {
+        html += '<div class="iter-sep">Final response</div>' + bubble('assistant', t.final_text, 'final');
+      }
+
+      html += section('Raw JSON', '<pre class="block">' + esc(JSON.stringify(t, null, 2)) + '</pre>', false);
+
+      detailEl.innerHTML = html;
+    }
+
+    setInterval(() => { if (refresh) refreshList(); }, 3000);
+    refreshList();
+  </script>
+</body>
+</html>

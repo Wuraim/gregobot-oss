@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gregobot logs</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --info: #58a6ff;
+      --warn: #d29922;
+      --error: #f85149;
+      --debug: #8b949e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    #controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 16px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    #controls label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      color: var(--muted);
+      user-select: none;
+    }
+    #controls input[type="text"], #controls input[type="password"] {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    button {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    button:hover { background: var(--border); }
+    a.navlink {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-family: inherit;
+    }
+    a.navlink:hover { background: var(--border); }
+    #status {
+      margin-left: auto;
+      color: var(--muted);
+    }
+    #log-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 16px;
+    }
+    .entry {
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
+      white-space: pre-wrap;
+      word-break: break-word;
+      display: flex;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .entry:hover { background: rgba(255,255,255,0.03); }
+    .entry.expanded .fields { display: block; }
+    .timestamp { color: var(--muted); min-width: 170px; }
+    .level { min-width: 50px; font-weight: bold; text-transform: uppercase; }
+    .level-INFO { color: var(--info); }
+    .level-WARN { color: var(--warn); }
+    .level-ERROR { color: var(--error); }
+    .level-DEBUG { color: var(--debug); }
+    .target { color: var(--muted); min-width: 220px; }
+    .message { flex: 1; }
+    .fields {
+      display: none;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+      padding: 4px 8px;
+      background: var(--bg);
+      border-radius: 4px;
+      border-left: 2px solid var(--border);
+    }
+    .hidden { display: none; }
+    #modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    #modal-content {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 24px;
+      border-radius: 8px;
+      min-width: 320px;
+    }
+    #modal-content h2 { margin-top: 0; }
+    #modal-content input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px;
+      border-radius: 4px;
+      margin: 12px 0;
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+  <div id="modal">
+    <div id="modal-content">
+      <h2>API Key Required</h2>
+      <p>Enter your bot token to view logs.</p>
+      <input type="password" id="api-key" placeholder="X-API-Key">
+      <button id="save-key">View Logs</button>
+    </div>
+  </div>
+
+  <div id="controls">
+    <label><input type="checkbox" id="filter-info" checked> INFO</label>
+    <label><input type="checkbox" id="filter-warn" checked> WARN</label>
+    <label><input type="checkbox" id="filter-error" checked> ERROR</label>
+    <label><input type="checkbox" id="filter-debug"> DEBUG</label>
+    <input type="text" id="search" placeholder="Search...">
+    <label><input type="checkbox" id="scroll-lock" checked> Scroll lock</label>
+    <button id="toggle-refresh">Pause</button>
+    <button id="clear">Clear</button>
+    <a class="navlink" href="/ai/logs">AI traces →</a>
+    <span id="status">Connecting...</span>
+  </div>
+
+  <div id="log-container"></div>
+
+  <script>
+    const container = document.getElementById('log-container');
+    const status = document.getElementById('status');
+    const modal = document.getElementById('modal');
+    const keyInput = document.getElementById('api-key');
+    const saveKeyBtn = document.getElementById('save-key');
+    const scrollLock = document.getElementById('scroll-lock');
+
+    let apiKey = sessionStorage.getItem('logsApiKey') || '';
+    let refresh = true;
+    let lines = 1000;
+
+    if (apiKey) {
+      modal.style.display = 'none';
+    }
+
+    saveKeyBtn.addEventListener('click', () => {
+      apiKey = keyInput.value.trim();
+      if (apiKey) {
+        sessionStorage.setItem('logsApiKey', apiKey);
+        modal.style.display = 'none';
+        fetchLogs();
+      }
+    });
+
+    keyInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') saveKeyBtn.click();
+    });
+
+    const filters = {
+      INFO: document.getElementById('filter-info'),
+      WARN: document.getElementById('filter-warn'),
+      ERROR: document.getElementById('filter-error'),
+      DEBUG: document.getElementById('filter-debug'),
+    };
+
+    const search = document.getElementById('search');
+    const toggleRefreshBtn = document.getElementById('toggle-refresh');
+    const clearBtn = document.getElementById('clear');
+
+    toggleRefreshBtn.addEventListener('click', () => {
+      refresh = !refresh;
+      toggleRefreshBtn.textContent = refresh ? 'Pause' : 'Resume';
+      status.textContent = refresh ? 'Live' : 'Paused';
+    });
+
+    clearBtn.addEventListener('click', () => {
+      container.innerHTML = '';
+    });
+
+    Object.values(filters).forEach(el => el.addEventListener('change', applyFilters));
+    search.addEventListener('input', applyFilters);
+
+    function applyFilters() {
+      const term = search.value.toLowerCase();
+      const active = Object.entries(filters)
+        .filter(([_, el]) => el.checked)
+        .map(([lvl]) => lvl);
+
+      document.querySelectorAll('.entry').forEach(entry => {
+        const lvl = entry.dataset.level;
+        const text = entry.textContent.toLowerCase();
+        const matches = active.includes(lvl) && (!term || text.includes(term));
+        entry.classList.toggle('hidden', !matches);
+      });
+    }
+
+    function renderEntry(entry) {
+      const el = document.createElement('div');
+      el.className = 'entry';
+      el.dataset.level = entry.level;
+      el.title = entry.span_id ? `span_id=${entry.span_id}` : '';
+
+      el.addEventListener('click', () => {
+        el.classList.toggle('expanded');
+      });
+
+      const ts = document.createElement('span');
+      ts.className = 'timestamp';
+      ts.textContent = entry.timestamp;
+
+      const lvl = document.createElement('span');
+      lvl.className = 'level level-' + entry.level;
+      lvl.textContent = entry.level;
+
+      const target = document.createElement('span');
+      target.className = 'target';
+      target.textContent = entry.span_name ? `${entry.target} [${entry.span_name}]` : entry.target;
+
+      const msg = document.createElement('div');
+      msg.className = 'message';
+
+      const msgText = document.createElement('div');
+      msgText.textContent = entry.message;
+      msg.appendChild(msgText);
+
+      if (entry.fields && entry.fields.length) {
+        const fields = document.createElement('div');
+        fields.className = 'fields';
+        fields.textContent = entry.fields.map(([k, v]) => `${k}=${v}`).join(' ');
+        msg.appendChild(fields);
+      }
+
+      el.appendChild(ts);
+      el.appendChild(lvl);
+      el.appendChild(target);
+      el.appendChild(msg);
+
+      return el;
+    }
+
+    let lastFingerprint = '';
+
+    async function fetchLogs() {
+      if (!apiKey) return;
+      try {
+        const res = await fetch('/api/logs?lines=' + lines, {
+          headers: { 'X-API-Key': apiKey }
+        });
+        if (res.status === 401) {
+          sessionStorage.removeItem('logsApiKey');
+          apiKey = '';
+          modal.style.display = 'flex';
+          status.textContent = 'Unauthorized';
+          return;
+        }
+        const data = await res.json();
+        if (!data.length) return;
+
+        const fingerprint = data.map(e => e.timestamp + e.level + e.target + e.message).join('\n');
+        if (fingerprint === lastFingerprint) return;
+        lastFingerprint = fingerprint;
+
+        const nearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 50;
+
+        container.innerHTML = '';
+        data.forEach(entry => container.appendChild(renderEntry(entry)));
+        applyFilters();
+
+        if (refresh && scrollLock.checked && nearBottom) {
+          container.scrollTop = container.scrollHeight;
+        }
+        status.textContent = 'Live';
+      } catch (e) {
+        status.textContent = 'Error: ' + e.message;
+      }
+    }
+
+    setInterval(fetchLogs, 2000);
+    fetchLogs();
+  </script>
+</body>
+</html>

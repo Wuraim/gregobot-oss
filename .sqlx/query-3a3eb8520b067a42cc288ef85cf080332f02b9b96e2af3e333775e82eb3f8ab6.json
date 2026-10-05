@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT monthly_training_graph_enabled FROM chat_settings WHERE chat_id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "monthly_training_graph_enabled",
+        "ordinal": 0,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "3a3eb8520b067a42cc288ef85cf080332f02b9b96e2af3e333775e82eb3f8ab6"
+}

@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO feature_proposals (user_id, title, description) VALUES (?, ?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "232ea6d97b5d53a85ae23f54381b2063240f43926cd61513735942b5f1f56281"
+}

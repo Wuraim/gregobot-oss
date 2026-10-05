@@ -1,0 +1,32 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT\n            gm.telegram_user_id,\n            u.username,\n            u.first_name\n        FROM group_members gm\n        LEFT JOIN users u ON u.telegram_user_id = gm.telegram_user_id\n        WHERE gm.chat_id = ?\n        ORDER BY gm.last_seen_at DESC\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "telegram_user_id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "username",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "first_name",
+        "ordinal": 2,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      true,
+      true
+    ]
+  },
+  "hash": "0537580873ee04aed698f6187958c67c529d2fe086688399b474d1c149928797"
+}

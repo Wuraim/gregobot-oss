@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        INSERT INTO group_members (chat_id, telegram_user_id)\n        VALUES (?, ?)\n        ON CONFLICT(chat_id, telegram_user_id) DO UPDATE SET\n            last_seen_at = datetime('now')\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "57b80b43e0d8b106ec89616184d494220996dcffe8427493b4b336998ee352ad"
+}

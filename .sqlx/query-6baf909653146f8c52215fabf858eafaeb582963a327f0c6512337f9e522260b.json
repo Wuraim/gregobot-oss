@@ -1,0 +1,68 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT model AS \"model!\",\n               COALESCE(SUM(prompt_tokens), 0) AS \"prompt_tokens!: i64\",\n               COALESCE(SUM(completion_tokens), 0) AS \"completion_tokens!: i64\",\n               COALESCE(SUM(total_tokens), 0) AS \"total_tokens!: i64\",\n               COUNT(*) AS \"request_count!: i64\",\n               COALESCE(SUM(cached_tokens), 0) AS \"cached_tokens!: i64\",\n               COALESCE(SUM(image_tokens), 0) AS \"image_tokens!: i64\",\n               COALESCE(SUM(CASE WHEN completion_tokens <= 0 THEN 1 ELSE 0 END), 0) AS \"zero_output_requests!: i64\",\n               COALESCE(SUM(CASE WHEN prompt_tokens <= 0 AND completion_tokens <= 0 THEN 1 ELSE 0 END), 0) AS \"zero_token_requests!: i64\"\n        FROM ai_usage\n        WHERE user_id = ? AND created_at >= ?\n        GROUP BY model\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "model!",
+        "ordinal": 0,
+        "type_info": "Text"
+      },
+      {
+        "name": "prompt_tokens!: i64",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "completion_tokens!: i64",
+        "ordinal": 2,
+        "type_info": "Integer"
+      },
+      {
+        "name": "total_tokens!: i64",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "request_count!: i64",
+        "ordinal": 4,
+        "type_info": "Integer"
+      },
+      {
+        "name": "cached_tokens!: i64",
+        "ordinal": 5,
+        "type_info": "Integer"
+      },
+      {
+        "name": "image_tokens!: i64",
+        "ordinal": 6,
+        "type_info": "Integer"
+      },
+      {
+        "name": "zero_output_requests!: i64",
+        "ordinal": 7,
+        "type_info": "Integer"
+      },
+      {
+        "name": "zero_token_requests!: i64",
+        "ordinal": 8,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "6baf909653146f8c52215fabf858eafaeb582963a327f0c6512337f9e522260b"
+}

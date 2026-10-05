@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO ai_usage (user_id, model, prompt_tokens, completion_tokens, total_tokens, cached_tokens, image_tokens, kind, request_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 9
+    },
+    "nullable": []
+  },
+  "hash": "644fb6b4f15ef26e61bbe62c2e812e45c72b6ddecc5011c21c88200e7a7e67ad"
+}

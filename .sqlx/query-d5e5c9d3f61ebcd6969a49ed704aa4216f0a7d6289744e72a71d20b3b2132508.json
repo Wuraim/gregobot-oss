@@ -1,0 +1,110 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT id, user_id, name, brand, barcode, notes,\n               kcal_per_100, protein_g_per_100, carbs_g_per_100, fat_g_per_100,\n               serving_qty, serving_unit, serving_label, source, created_at, updated_at\n        FROM foods\n        WHERE id = ? AND user_id = ?\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "user_id",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "name",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "brand",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "barcode",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "notes",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "kcal_per_100",
+        "ordinal": 6,
+        "type_info": "Float"
+      },
+      {
+        "name": "protein_g_per_100",
+        "ordinal": 7,
+        "type_info": "Float"
+      },
+      {
+        "name": "carbs_g_per_100",
+        "ordinal": 8,
+        "type_info": "Float"
+      },
+      {
+        "name": "fat_g_per_100",
+        "ordinal": 9,
+        "type_info": "Float"
+      },
+      {
+        "name": "serving_qty",
+        "ordinal": 10,
+        "type_info": "Float"
+      },
+      {
+        "name": "serving_unit",
+        "ordinal": 11,
+        "type_info": "Text"
+      },
+      {
+        "name": "serving_label",
+        "ordinal": 12,
+        "type_info": "Text"
+      },
+      {
+        "name": "source",
+        "ordinal": 13,
+        "type_info": "Text"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 14,
+        "type_info": "Text"
+      },
+      {
+        "name": "updated_at",
+        "ordinal": 15,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "d5e5c9d3f61ebcd6969a49ed704aa4216f0a7d6289744e72a71d20b3b2132508"
+}

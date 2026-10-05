@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE training_entries SET description = ?, recorded_at = ?, activity_type_id = ? WHERE id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 4
+    },
+    "nullable": []
+  },
+  "hash": "5b8b34474ff2f184c20113f4ddce6216ed9da0c69e858446c6d0565bc4ee68b1"
+}

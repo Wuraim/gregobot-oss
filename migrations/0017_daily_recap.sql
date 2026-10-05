@@ -1,0 +1,4 @@
+ALTER TABLE users ADD COLUMN daily_recap_enabled INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE users ADD COLUMN daily_recap_hour   INTEGER NOT NULL DEFAULT 20;
+ALTER TABLE users ADD COLUMN daily_recap_minute INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE users ADD COLUMN last_daily_recap_at TEXT;

@@ -1,0 +1,56 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT\n            id AS \"id!\",\n            sender_telegram_user_id,\n            caption,\n            file_id,\n            image_jpeg,\n            COALESCE(taken_at, created_at) AS \"taken_at!: String\",\n            embedding\n        FROM photo_messages\n        WHERE chat_id = ? AND message_id = ?\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id!",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "sender_telegram_user_id",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "caption",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "file_id",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "image_jpeg",
+        "ordinal": 4,
+        "type_info": "Blob"
+      },
+      {
+        "name": "taken_at!: String",
+        "ordinal": 5,
+        "type_info": "Null"
+      },
+      {
+        "name": "embedding",
+        "ordinal": 6,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      true,
+      false,
+      true,
+      true,
+      true,
+      null,
+      true
+    ]
+  },
+  "hash": "75b6b8e8bd8c5c43475481bf1d11f479368ef24a2fbbee021d66dfecd6d18b46"
+}

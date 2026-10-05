@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT sport_reaction_emoji FROM chat_settings WHERE chat_id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "sport_reaction_emoji",
+        "ordinal": 0,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "24e1f8311bc96d6c9a6c0205f228c351c5cd09d7b8222113b8773d05aa5cafa2"
+}

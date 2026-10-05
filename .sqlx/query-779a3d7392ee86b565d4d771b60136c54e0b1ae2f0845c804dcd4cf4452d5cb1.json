@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        UPDATE foods SET\n            name = ?, brand = ?, barcode = ?, notes = ?,\n            kcal_per_100 = ?, protein_g_per_100 = ?, carbs_g_per_100 = ?, fat_g_per_100 = ?,\n            serving_qty = ?, serving_unit = ?, serving_label = ?, source = ?,\n            updated_at = datetime('now')\n        WHERE id = ? AND user_id = ?\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 14
+    },
+    "nullable": []
+  },
+  "hash": "779a3d7392ee86b565d4d771b60136c54e0b1ae2f0845c804dcd4cf4452d5cb1"
+}

@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        INSERT INTO photo_messages (\n            chat_id, message_id, sender_telegram_user_id, caption, file_id, taken_at\n        )\n        VALUES (?, ?, ?, ?, ?, COALESCE(?, datetime('now')))\n        ON CONFLICT(chat_id, message_id) DO UPDATE SET\n            sender_telegram_user_id = excluded.sender_telegram_user_id,\n            caption = excluded.caption,\n            file_id = excluded.file_id,\n            taken_at = COALESCE(photo_messages.taken_at, excluded.taken_at)\n        RETURNING id AS \"id!\"\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id!",
+        "ordinal": 0,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 6
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "6bc222edbc1424300d8efe218037f2876816e11b0d0de31113e537d74351d598"
+}

@@ -1,0 +1,50 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT fp.id, fp.user_id, fp.title, fp.description, fp.created_at, u.username\n           FROM feature_proposals fp\n           JOIN users u ON u.id = fp.user_id\n           ORDER BY fp.created_at DESC LIMIT ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "user_id",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "title",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "description",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "username",
+        "ordinal": 5,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  "hash": "a06de266a175c6fba9f56c1fdea831599d74b00a07cdef23f99b08c029eded77"
+}

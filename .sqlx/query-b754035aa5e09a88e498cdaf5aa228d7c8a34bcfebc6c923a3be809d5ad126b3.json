@@ -1,0 +1,80 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT id, meal_id, food_id, description, quantity, unit,\n               kcal, protein_g, carbs_g, fat_g, source\n        FROM meal_items\n        WHERE meal_id = ?\n        ORDER BY id ASC\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "meal_id",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "food_id",
+        "ordinal": 2,
+        "type_info": "Integer"
+      },
+      {
+        "name": "description",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "quantity",
+        "ordinal": 4,
+        "type_info": "Float"
+      },
+      {
+        "name": "unit",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "kcal",
+        "ordinal": 6,
+        "type_info": "Float"
+      },
+      {
+        "name": "protein_g",
+        "ordinal": 7,
+        "type_info": "Float"
+      },
+      {
+        "name": "carbs_g",
+        "ordinal": 8,
+        "type_info": "Float"
+      },
+      {
+        "name": "fat_g",
+        "ordinal": 9,
+        "type_info": "Float"
+      },
+      {
+        "name": "source",
+        "ordinal": 10,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "b754035aa5e09a88e498cdaf5aa228d7c8a34bcfebc6c923a3be809d5ad126b3"
+}

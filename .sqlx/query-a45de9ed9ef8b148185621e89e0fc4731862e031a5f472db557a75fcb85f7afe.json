@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        UPDATE photo_messages\n        SET training_counted = 1\n        WHERE chat_id = ? AND message_id = ? AND training_counted = 0\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "a45de9ed9ef8b148185621e89e0fc4731862e031a5f472db557a75fcb85f7afe"
+}

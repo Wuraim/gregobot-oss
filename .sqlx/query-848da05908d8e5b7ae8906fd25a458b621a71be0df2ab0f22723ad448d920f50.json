@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT p.image_jpeg\n        FROM photo_messages p\n        JOIN users u ON u.telegram_user_id = p.sender_telegram_user_id\n        WHERE p.id = ? AND u.id = ?\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "image_jpeg",
+        "ordinal": 0,
+        "type_info": "Blob"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      true
+    ]
+  },
+  "hash": "848da05908d8e5b7ae8906fd25a458b621a71be0df2ab0f22723ad448d920f50"
+}

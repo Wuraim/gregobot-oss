@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE users SET daily_recap_enabled = ? WHERE telegram_user_id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "942382985574e00b11550e81fc1e90a043ca5916a9511180e128d0dd91c8a14d"
+}

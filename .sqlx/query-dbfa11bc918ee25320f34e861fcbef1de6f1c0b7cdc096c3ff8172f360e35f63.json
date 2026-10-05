@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        INSERT INTO reminders (user_id, target_type, target_id, custom_message, scheduled_at, recurrence)\n        VALUES (?, ?, ?, ?, ?, ?)\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 6
+    },
+    "nullable": []
+  },
+  "hash": "dbfa11bc918ee25320f34e861fcbef1de6f1c0b7cdc096c3ff8172f360e35f63"
+}

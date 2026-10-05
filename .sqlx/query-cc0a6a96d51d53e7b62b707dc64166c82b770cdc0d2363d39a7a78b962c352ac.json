@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        UPDATE users SET\n            nudges_enabled = COALESCE(?, nudges_enabled),\n            nudge_inactivity_days = COALESCE(?, nudge_inactivity_days)\n        WHERE telegram_user_id = ?\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "cc0a6a96d51d53e7b62b707dc64166c82b770cdc0d2363d39a7a78b962c352ac"
+}

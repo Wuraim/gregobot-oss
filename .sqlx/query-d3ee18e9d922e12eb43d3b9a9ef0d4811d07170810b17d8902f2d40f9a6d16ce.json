@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        UPDATE meals SET kind = ?, label = ?, eaten_at = ?, notes = ?\n        WHERE id = ? AND user_id = ?\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 6
+    },
+    "nullable": []
+  },
+  "hash": "d3ee18e9d922e12eb43d3b9a9ef0d4811d07170810b17d8902f2d40f9a6d16ce"
+}

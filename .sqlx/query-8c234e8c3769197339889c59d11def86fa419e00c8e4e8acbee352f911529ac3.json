@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        DELETE FROM conversations\n        WHERE created_at < datetime('now', '-7 days')\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": []
+  },
+  "hash": "8c234e8c3769197339889c59d11def86fa419e00c8e4e8acbee352f911529ac3"
+}

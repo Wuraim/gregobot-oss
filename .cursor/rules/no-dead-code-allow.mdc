@@ -1,0 +1,31 @@
+---
+description: Never silence unused code with #[allow(dead_code)]
+alwaysApply: true
+---
+
+# No `#[allow(dead_code)]`
+
+Do not add `#[allow(dead_code)]` (or `#[allow(unused)]` to hide dead items).
+
+- **Use** the field, function, or method, or
+- Mark test-only helpers `#[cfg(test)]`, or
+- **Delete** the unused item (and stop selecting unused SQL columns).
+
+```rust
+// BAD
+#[allow(dead_code)]
+pub id: i64;
+
+// GOOD — drop it, or actually read it
+pub content: String;
+```
+
+```rust
+// BAD
+#[allow(dead_code)]
+pub fn is_duplicate(&self) -> bool { ... }
+
+// GOOD — only compiled in tests
+#[cfg(test)]
+pub fn is_duplicate(&self) -> bool { ... }
+```

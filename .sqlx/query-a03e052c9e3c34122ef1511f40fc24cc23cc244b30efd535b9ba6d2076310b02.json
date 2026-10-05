@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        UPDATE users SET\n            role_id = (SELECT id FROM roles WHERE name = ?),\n            web_search_enabled = COALESCE(?, web_search_enabled)\n        WHERE telegram_user_id = ?\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "a03e052c9e3c34122ef1511f40fc24cc23cc244b30efd535b9ba6d2076310b02"
+}

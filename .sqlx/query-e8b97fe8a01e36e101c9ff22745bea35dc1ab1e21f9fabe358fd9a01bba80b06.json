@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        UPDATE reminders\n        SET status = 'cancelled'\n        WHERE target_type = ? AND target_id = ? AND status = 'pending'\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "e8b97fe8a01e36e101c9ff22745bea35dc1ab1e21f9fabe358fd9a01bba80b06"
+}

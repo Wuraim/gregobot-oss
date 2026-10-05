@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT COUNT(*) as count\n        FROM proactive_interactions\n        WHERE user_id = ?\n          AND sent_at > datetime('now', '-24 hours')\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "count",
+        "ordinal": 0,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "2dcbb5439f2a8805b4aa1f588a99920b51293dc7d062bb4268c1fac1ef44a9e7"
+}

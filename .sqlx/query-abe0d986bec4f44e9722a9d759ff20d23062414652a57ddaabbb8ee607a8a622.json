@@ -1,0 +1,38 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT u.id AS user_id,\n               u.username AS username,\n               u.first_name AS first_name,\n               COUNT(te.id) AS \"sessions!: i64\"\n        FROM group_members gm\n        JOIN users u ON u.telegram_user_id = gm.telegram_user_id\n        JOIN training_entries te ON te.user_id = u.id\n        WHERE gm.chat_id = ?\n          AND te.recorded_at >= ?\n          AND te.recorded_at < ?\n        GROUP BY u.id\n        ORDER BY COUNT(te.id) DESC\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "user_id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "username",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "first_name",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "sessions!: i64",
+        "ordinal": 3,
+        "type_info": "Null"
+      }
+    ],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": [
+      true,
+      true,
+      true,
+      null
+    ]
+  },
+  "hash": "abe0d986bec4f44e9722a9d759ff20d23062414652a57ddaabbb8ee607a8a622"
+}

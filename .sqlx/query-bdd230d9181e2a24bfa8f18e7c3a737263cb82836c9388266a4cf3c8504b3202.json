@@ -1,0 +1,80 @@
+{
+  "db_name": "SQLite",
+  "query": "\n            SELECT id, user_id, target_type, target_id, custom_message, scheduled_at, status, created_at, fired_at, attempts, recurrence\n            FROM reminders\n            WHERE user_id = ?\n            ORDER BY scheduled_at DESC\n            LIMIT ?\n            ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "user_id",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "target_type",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "target_id",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "custom_message",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "scheduled_at",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "status",
+        "ordinal": 6,
+        "type_info": "Text"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 7,
+        "type_info": "Text"
+      },
+      {
+        "name": "fired_at",
+        "ordinal": 8,
+        "type_info": "Text"
+      },
+      {
+        "name": "attempts",
+        "ordinal": 9,
+        "type_info": "Integer"
+      },
+      {
+        "name": "recurrence",
+        "ordinal": 10,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "bdd230d9181e2a24bfa8f18e7c3a737263cb82836c9388266a4cf3c8504b3202"
+}

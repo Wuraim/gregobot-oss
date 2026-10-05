@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE users SET web_search_enabled = ? WHERE telegram_user_id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "783a5f2ca77b322f48b83288835671f8d3510ab0843fcd55a6dc270e40aefb2e"
+}

@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        INSERT INTO users (telegram_user_id, role_id, username, first_name, language_code, timezone)\n        SELECT ?, r.id, ?, ?, ?, ?\n        FROM roles r WHERE r.name = 'pending'\n        ON CONFLICT(telegram_user_id) DO UPDATE SET\n            username = COALESCE(excluded.username, users.username),\n            first_name = COALESCE(excluded.first_name, users.first_name),\n            timezone = COALESCE(users.timezone, excluded.timezone)\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 5
+    },
+    "nullable": []
+  },
+  "hash": "baf5f7e5be4388d45ea24721476f6060b8aff88d3bf6600be021dc40ffa097e9"
+}

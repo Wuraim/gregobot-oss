@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        INSERT INTO chat_settings (chat_id, monthly_training_graph_enabled)\n        VALUES (?, ?)\n        ON CONFLICT(chat_id) DO UPDATE SET\n            monthly_training_graph_enabled = excluded.monthly_training_graph_enabled\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "8f59a8c840fc9bb70456db0950925706e82904e9753df04070ab556d23b575fd"
+}

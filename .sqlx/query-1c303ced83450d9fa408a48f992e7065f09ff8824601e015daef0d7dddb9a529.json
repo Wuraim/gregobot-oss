@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        INSERT OR IGNORE INTO users (telegram_user_id, role_id, web_search_enabled, daily_recap_enabled, nudges_enabled)\n        SELECT ?, r.id, 1, 1, 1 FROM roles r WHERE r.name = 'admin'\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": []
+  },
+  "hash": "1c303ced83450d9fa408a48f992e7065f09ff8824601e015daef0d7dddb9a529"
+}

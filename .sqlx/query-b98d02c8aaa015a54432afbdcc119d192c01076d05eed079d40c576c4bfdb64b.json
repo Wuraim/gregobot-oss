@@ -1,0 +1,50 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT c.role, c.content, c.created_at,\n               u.username AS username,\n               u.first_name AS first_name,\n               u.telegram_user_id AS telegram_user_id\n        FROM conversations c\n        LEFT JOIN users u ON u.id = c.user_id\n        WHERE c.user_id = ? AND c.chat_id IS NULL\n        ORDER BY c.id DESC\n        LIMIT ?\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "role",
+        "ordinal": 0,
+        "type_info": "Text"
+      },
+      {
+        "name": "content",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "username",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "first_name",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "telegram_user_id",
+        "ordinal": 5,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "b98d02c8aaa015a54432afbdcc119d192c01076d05eed079d40c576c4bfdb64b"
+}

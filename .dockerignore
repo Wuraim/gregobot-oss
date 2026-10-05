@@ -1,0 +1,28 @@
+# Rust build artifacts — largest directory, never needed in image
+target/
+
+# Git history
+.git/
+.gitignore
+
+# Local SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
+# Local environment file — secrets must never land in the image
+.env
+
+# Documentation (except the bot persona which must be baked into the image)
+**/*.md
+!prompt/PERSONA.md
+AGENTS.md
+
+# GitHub Actions config — not needed at runtime
+.github/
+
+# Editor / OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        UPDATE photo_messages\n        SET image_jpeg = ?\n        WHERE chat_id = ? AND message_id = ?\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "7088973293bc6872d0bce3178b2bc8a3be7436f09ddcd2a5220180ae920f20b0"
+}
