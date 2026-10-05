@@ -24,6 +24,9 @@ rsync -a --delete \
   --exclude '.opencode/' \
   --exclude '.cursor/plans/' \
   --exclude 'scripts/publish_public_repo.sh' \
+  --exclude 'scripts/finish_public_push.sh' \
+  --exclude 'scripts/sync_public_repo.sh' \
+  --exclude '.github/workflows/' \
   "$ROOT/" "$DEST/"
 
 # Keep cargo-deps skill; ensure private ops paths are gone
